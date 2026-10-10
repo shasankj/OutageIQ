@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "deny": [
+      "Bash(git commit *)",
+      "Bash(git push *)"
+    ],
+    "ask": [
+      "Bash(aws *)",
+      "Bash(terraform apply *)",
+      "Bash(terraform destroy *)",
+      "Bash(cdk deploy *)",
+      "Bash(cdk destroy *)",
+      "Bash(psql *)"
+    ]
+  }
+}
