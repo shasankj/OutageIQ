@@ -18,6 +18,7 @@ FROM pg_roles WHERE rolname LIKE 'outageiq%' ORDER BY 1;
 SELECT r.rolname,
        has_schema_privilege(r.rolname, 'ops', 'USAGE') AS ops_usage,
        has_schema_privilege(r.rolname, 'rag', 'USAGE') AS rag_usage,
+       has_schema_privilege(r.rolname, 'public', 'USAGE') AS public_usage,  -- needed to see the vector type
        has_schema_privilege(r.rolname, 'ops', 'CREATE') AS ops_create,
        has_schema_privilege(r.rolname, 'rag', 'CREATE') AS rag_create
 FROM pg_roles r WHERE r.rolname LIKE 'outageiq%' ORDER BY 1;

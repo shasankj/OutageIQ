@@ -6,3 +6,7 @@ __pycache__/
 node_modules/
 dist/
 .DS_Store
+data/traces/
+data/feedback.jsonl
+frontend/dist/
+data/query_embedding_cache.jsonl

@@ -49,6 +49,23 @@ def main() -> int:
     except Exception as e:
         results.append(check("reader cannot CREATE tables", False, type(e).__name__))
 
+    # The reader must not be able to modify data, whatever the session settings say.
+    for label, sql in [("INSERT", "INSERT INTO ops.sites (site_code, site_name, region, state, city) VALUES ('x','x','x','NJ','x')"),
+                       ("UPDATE", "UPDATE ops.outages SET priority = 'low' WHERE false"),
+                       ("DELETE", "DELETE FROM ops.tickets WHERE false"),
+                       ("TRUNCATE", "TRUNCATE ops.alarms"),
+                       ("nextval", "SELECT nextval('ops.sites_site_id_seq')")]:
+        try:
+            with connect("reader") as conn:
+                conn.execute("SET default_transaction_read_only = off")
+                conn.commit()
+                conn.execute(sql)
+            results.append(check(f"reader cannot {label}", False, "statement succeeded"))
+        except psycopg.errors.InsufficientPrivilege:
+            results.append(check(f"reader cannot {label}", True, "permission denied"))
+        except Exception as e:
+            results.append(check(f"reader cannot {label}", False, type(e).__name__))
+
     # The indexer must not see the ops schema.
     try:
         with connect("indexer") as conn:

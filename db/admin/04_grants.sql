@@ -3,6 +3,8 @@
 -- Run AFTER 03_roles.sql. Safe to re-run.
 
 -- Schema access
+-- `public` holds the pgvector type and operators; without USAGE the roles cannot see `vector`.
+GRANT USAGE ON SCHEMA public TO outageiq_indexer, outageiq_reader, outageiq_colleague_ro;
 GRANT USAGE ON SCHEMA ops TO outageiq_reader, outageiq_colleague_ro;
 GRANT USAGE ON SCHEMA rag TO outageiq_reader, outageiq_colleague_ro, outageiq_indexer;
 -- (the indexer has no access to ops at all)
